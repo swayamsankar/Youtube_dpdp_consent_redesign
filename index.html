@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YouTube — DPDP Consent Flow Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="rail">
+  <h1>YouTube — verifiable parental consent flow</h1>
+  <p>Clickable prototype · happy path only · DPDP Act, 2023 alignment</p>
+  <div class="stepper" id="stepper"></div>
+</div>
+
+<div class="phone">
+  <div class="notch"></div>
+
+  <!-- SCREEN 1: Sign up entry -->
+  <div class="screen active" data-screen="1">
+    <div class="yt-logo"><div class="mark"></div><span>YouTube</span></div>
+    <div class="content">
+      <div class="center-flow" style="padding-top:60px;">
+        <div class="big-icon" style="background:#2a2a2a;">👤</div>
+        <h2 class="hd">Create your account</h2>
+        <p class="sub">Just one more step before you start watching — help us set things up the right way for you.</p>
+      </div>
+      <div class="stack" style="margin-top:10px;">
+        <label class="field-label">Full name</label>
+        <input class="field" value="Ananya Sharma" readonly />
+        <label class="field-label">Date of birth</label>
+        <input class="field" value="14 March 2012" readonly />
+      </div>
+    </div>
+    <div style="padding:16px 22px 22px;">
+      <button class="btn btn-primary" onclick="go(2)">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: Age-intent gate -->
+  <div class="screen" data-screen="2">
+    <div class="topbar"><div class="back" onclick="goBack()">←</div><div class="title">Account setup</div></div>
+    <div class="content">
+      <h2 class="hd">Who's this account for?</h2>
+      <p class="sub">Based on the birth date you entered, this account belongs to someone under 18. We just need to confirm that with a guardian — it only takes a minute.</p>
+
+      <div class="choice-card" onclick="go(3)">
+        <div class="ic">🧒</div>
+        <div class="txt">
+          <strong>This is for me, and I'm under 18</strong>
+          <span>A parent or guardian will verify and set things up with you</span>
+        </div>
+      </div>
+      <div class="choice-card" style="opacity:.45; cursor:default;">
+        <div class="ic">🧑</div>
+        <div class="txt">
+          <strong>I'm 18 or older</strong>
+          <span>Not applicable for this account</span>
+        </div>
+      </div>
+
+      <div class="altpath" onclick="go(10)">
+        <span>Prefer one page instead of five?</span>
+        <strong>Try quick setup →</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: Guardian phone entry -->
+  <div class="screen" data-screen="3">
+    <div class="topbar"><div class="back" onclick="goBack()">←</div><div class="title">Guardian verification</div></div>
+    <div class="content">
+      <div class="big-icon" style="margin:10px 0 20px;">🛡️</div>
+      <h2 class="hd">Let's verify your guardian</h2>
+      <p class="sub">Enter a parent or guardian's mobile number. We'll send a one-time code to confirm they're aware and can consent on your behalf — required under India's data protection law for under-18 accounts.</p>
+      <label class="field-label">Guardian's mobile number</label>
+      <input class="field" value="+91 98•• •••• 42" readonly />
+    </div>
+    <div style="padding:16px 22px 22px;">
+      <button class="btn btn-primary" onclick="go(4)">Send verification code</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: OTP entry -->
+  <div class="screen" data-screen="4">
+    <div class="topbar"><div class="back" onclick="goBack()">←</div><div class="title">Guardian verification</div></div>
+    <div class="content">
+      <div class="center-flow" style="padding-top:20px;">
+        <div class="big-icon">💬</div>
+        <h2 class="hd">Enter the code</h2>
+        <p class="sub">We sent a 6-digit code to the guardian's number ending in 42. Ask them to share it with you to continue.</p>
+      </div>
+      <input class="field otp" value="482 917" readonly />
+      <p class="hint">Didn't get a code? Resend in 0:28</p>
+    </div>
+    <div style="padding:16px 22px 22px;">
+      <button class="btn btn-primary" onclick="go(5)">Verify</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: Purpose-specific consent -->
+  <div class="screen" data-screen="5">
+    <div class="topbar"><div class="back" onclick="goBack()">←</div><div class="title">Consent</div></div>
+    <div class="content">
+      <span class="badge"><span class="dotpulse"></span> Guardian verified — Mrs. Sharma</span>
+      <h2 class="hd">What can YouTube do with Ananya's data?</h2>
+      <p class="sub">Reviewed and set by the verified guardian. Each purpose below is separate — nothing is bundled, and everything can be changed later from the Family Privacy Centre.</p>
+
+      <div class="stack">
+        <div class="purpose-row">
+          <div class="txt"><strong>Show videos and search results</strong><span>Needed for YouTube to work at all</span></div>
+          <div class="toggle on locked"></div>
+        </div>
+        <div class="purpose-row">
+          <div class="txt"><strong>Watch history for recommendations</strong><span>Personalises the home feed based on views</span></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="purpose-row">
+          <div class="txt"><strong>Behavioural tracking &amp; targeted ads</strong><span>Off by default for verified under-18 accounts, per DPDP Sec. 9</span></div>
+          <div class="toggle locked"></div>
+        </div>
+        <div class="purpose-row">
+          <div class="txt"><strong>Comments and public activity</strong><span>Lets Ananya comment and like videos</span></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:16px 22px 22px;">
+      <button class="btn btn-primary" onclick="go(6)">Confirm consent</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: Confirmation -->
+  <div class="screen" data-screen="6">
+    <div class="topbar"><div class="back" onclick="goBack()">←</div><div class="title">&nbsp;</div></div>
+    <div class="content">
+      <div class="center-flow" style="padding-top:70px;">
+        <div class="big-icon">✅</div>
+        <h2 class="hd">All set, Ananya!</h2>
+        <p class="sub">Your guardian's consent is on file. Targeted ads and behavioural tracking are switched off for this account, and Mrs. Sharma can review or change any of this anytime from the Family Privacy Centre.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic">🔔</div>
+        <div class="txt"><strong>Guardian notified</strong><span>Mrs. Sharma will get a copy of this consent by SMS and email</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic">🔒</div>
+        <div class="txt"><strong>Consent is reviewable anytime</strong><span>No need to contact support — it's one tap away</span></div>
+      </div>
+    </div>
+    <div style="padding:16px 22px 22px;">
+      <button class="btn btn-primary" onclick="go(7)">Start watching</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: Home feed with assurance banner -->
+  <div class="screen" data-screen="7">
+    <div class="yt-logo" style="justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="back" onclick="goBack()" style="position:static;">←</div>
+        <div class="mark"></div><span>YouTube</span>
+      </div>
+      <div onclick="go(8)" style="width:30px;height:30px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;">👪</div>
+    </div>
+    <div class="content homefeed">
+      <span class="badge grey">🛡️ Supervised account · tracking off</span>
+      <div class="video-card">
+        <div class="thumb">Video thumbnail</div>
+        <div class="video-meta"><div class="avatar"></div><div class="t"><strong>NCERT Class 9 Science — Chapter 3 explained</strong><span>EduSpark India · 812K views</span></div></div>
+      </div>
+      <div class="video-card">
+        <div class="thumb">Video thumbnail</div>
+        <div class="video-meta"><div class="avatar"></div><div class="t"><strong>Lo-fi study beats for focus — 3 hour mix</strong><span>Calm Sounds · 2.1M views</span></div></div>
+      </div>
+      <div class="video-card">
+        <div class="thumb">Video thumbnail</div>
+        <div class="video-meta"><div class="avatar"></div><div class="t"><strong>How volcanoes work, explained simply</strong><span>Curious World · 540K views</span></div></div>
+      </div>
+    </div>
+    <div class="bottomnav">
+      <div class="navitem active"><span class="dotico">🏠</span>Home</div>
+      <div class="navitem"><span class="dotico">▶️</span>Shorts</div>
+      <div class="navitem"><span class="dotico">＋</span>Create</div>
+      <div class="navitem"><span class="dotico">📼</span>Subs</div>
+      <div class="navitem" onclick="go(8)"><span class="dotico">👪</span>Family</div>
+    </div>
+  </div>
+
+  <!-- SCREEN 8: Family Privacy Centre -->
+  <div class="screen" data-screen="8">
+    <div class="topbar"><div class="back" onclick="goBack()">←</div><div class="title">Family Privacy Centre</div></div>
+    <div class="content">
+      <div class="parent-header">
+        <div class="av">👩</div>
+        <div class="t"><strong>Mrs. Sharma</strong><span>Guardian of Ananya Sharma · verified 03 Jul 2026</span></div>
+      </div>
+      <p class="sub" style="margin-bottom:8px;">Everything collected about Ananya's account, and every consent you've given, in one place.</p>
+
+      <div class="link-row" onclick="go(9)">
+        <div class="t"><strong>Review &amp; edit consent</strong><span>Change what YouTube can use, purpose by purpose</span></div>
+        <div class="chev">›</div>
+      </div>
+      <div class="link-row">
+        <div class="t"><strong>See what data is collected</strong><span>Watch history, searches, device info</span></div>
+        <div class="chev">›</div>
+      </div>
+      <div class="link-row">
+        <div class="t"><strong>Download Ananya's data</strong><span>Export a copy — DPDP Sec. 11</span></div>
+        <div class="chev">›</div>
+      </div>
+      <div class="link-row">
+        <div class="t"><strong>Request data deletion</strong><span>Erase Ananya's data — DPDP Sec. 12</span></div>
+        <div class="chev">›</div>
+      </div>
+      <div class="link-row">
+        <div class="t"><strong>Grievance &amp; support</strong><span>Contact YouTube's Data Protection Officer</span></div>
+        <div class="chev">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 9: Edit consent (loops back to purposes, parent view) -->
+  <div class="screen" data-screen="9">
+    <div class="topbar"><div class="back" onclick="goBack()">←</div><div class="title">Edit consent</div></div>
+    <div class="content">
+      <h2 class="hd">Ananya's active consents</h2>
+      <p class="sub">You can switch any of these off at any time. Turning one off takes effect immediately — no need to explain why.</p>
+      <div class="stack">
+        <div class="purpose-row">
+          <div class="txt"><strong>Show videos and search results</strong><span>Required for the app to function</span></div>
+          <div class="toggle on locked"></div>
+        </div>
+        <div class="purpose-row">
+          <div class="txt"><strong>Watch history for recommendations</strong><span>Personalises the home feed</span></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="purpose-row">
+          <div class="txt"><strong>Behavioural tracking &amp; targeted ads</strong><span>Locked off for under-18 accounts</span></div>
+          <div class="toggle locked"></div>
+        </div>
+        <div class="purpose-row">
+          <div class="txt"><strong>Comments and public activity</strong><span>Lets Ananya comment and like videos</span></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:16px 22px 22px;">
+      <button class="btn btn-secondary" onclick="go(8)">Done</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 10: Quick setup (alternate condensed path) -->
+  <div class="screen" data-screen="10">
+    <div class="topbar"><div class="back" onclick="goBack()">←</div><div class="title">Quick setup</div></div>
+    <div class="content">
+      <span class="badge grey">⚡ Faster path · same protections</span>
+      <h2 class="hd">Set up in one go</h2>
+      <p class="sub">Age check, guardian verification and consent choices on a single page. Everything here still follows the DPDP Act, 2023 — nothing is bundled or pre-ticked on your behalf.</p>
+
+      <p class="quick-section-label">Your age</p>
+      <div class="age-chip">
+        <span class="l">Confirmed from date of birth</span>
+        <span class="r"><span class="dot"></span> Under 18</span>
+      </div>
+
+      <p class="quick-section-label">Guardian verification</p>
+      <label class="field-label">Guardian's mobile number</label>
+      <input class="field" value="+91 98•• •••• 42" readonly style="margin-bottom:14px;" />
+      <label class="field-label">Enter OTP</label>
+      <input class="field otp" value="482 917" readonly style="margin-bottom:6px;" />
+      <p class="hint" style="margin-top:0; margin-bottom:4px; text-align:left;">Sent to the guardian's number · resend in 0:28</p>
+
+      <p class="quick-section-label">What YouTube can use</p>
+      <div class="stack">
+        <div class="purpose-row">
+          <div class="txt"><strong>Watch history for recommendations</strong><span>Personalises the home feed based on views</span></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="purpose-row">
+          <div class="txt"><strong>Targeted ads &amp; tracking</strong><span>Off by default for verified under-18 accounts, per DPDP Sec. 9</span></div>
+          <div class="toggle locked"></div>
+        </div>
+      </div>
+      <p class="quick-note">Guardian's number stays masked, and every choice above can be changed later from the Family Privacy Centre.</p>
+    </div>
+    <div style="padding:16px 22px 22px;">
+      <button class="btn btn-primary" onclick="go(6)">Confirm consent</button>
+      <button class="btn btn-ghost" onclick="go(2)" style="margin-top:2px;">Use the full step-by-step flow instead</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">
+  <p><b>Happy path only.</b> Screens: sign-up → age-intent gate → guardian OTP verification → purpose-specific consent → confirmation → home feed → Family Privacy Centre → edit consent. Built for the DPDP Act, 2023 product thinking case study.</p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
